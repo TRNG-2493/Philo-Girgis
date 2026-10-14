@@ -2,3 +2,9 @@ Task 1: do thing
 Task 2: do different thing
 Task 3: do very different thing
 Task 4: a fourth task
+
+Priority
+Task 3: URGENT
+Task 4: HIGH
+Task 2: MEDIUM
+Task 1: LOW
