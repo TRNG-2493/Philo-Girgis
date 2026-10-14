@@ -42,6 +42,10 @@ passed_tests = int(input("Tests passed: "))
 #
 # TODO 2c: print  Title: Valid login        (with your own test_title)
 
+test_id = module_prefix+"-"+str(test_number).zfill(4)
+print(f"Generated ID: {test_id}")
+print(f"{test_title}: Valid login")
+
 
 # ---------------------------------------------------------------------------
 # PART 3 - Summary: failures, pass rate, release decision
