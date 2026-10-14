@@ -48,5 +48,31 @@ print(f"Guess the number between {MIN_NUMBER} and {MAX_NUMBER}. "
 #        result = "LOSE" and break
 # Commit when the loop works for a WIN. Then commit again after LOSE/QUIT.
 
+while True:
+ answer = input("Guess (1-100): ").strip()
+ if answer.lower() == "q":
+  print(f"You quit. The number was {SECRET_NUMBER}.")
+  result = "QUIT"
+  break
+ if not answer.isdigit():
+  print("Invalid input: please type a whole number.")
+  continue
+ if int(answer) > MAX_NUMBER or int(answer) < MIN_NUMBER:
+  print("Out of range: choose a number from 1 to 100.")
+  continue
+ attempts+=1
+ if int(answer) > SECRET_NUMBER:
+  print("Too high")
+ elif int(answer) < SECRET_NUMBER:
+  print("Too low")
+ else:
+  print(f"Correct! You needed {attempts} attempts.")
+  result = "WIN"
+  break
+ if attempts >= MAX_ATTEMPTS:
+  print(f"Out of attempts! The number was {SECRET_NUMBER}.")
+  result = "LOSE"
+  break
+
 # ---- Final line (provided; the checker reads this) --------------------------
 print(f"RESULT: {result} attempts={attempts}")
