@@ -1,0 +1,29 @@
+git log --oneline
+
+3c6333d (HEAD -> master) added a readme and cleaned up the test formatter
+bda1639 fixed a misunderstanding concerning title
+249bc99 Add failed count, pass rate and release decision
+957d2d2 Add zero-padded test-case ID output
+5a07547 Add prompts for module, number, title and test counts
+
+
+
+python check_exercise.py
+
+=== Program checks (4 sample runs) ===
+  PASS  Sample run: login / 42 / 34 of 40 passed
+  PASS  Sample run: messy spaces, everything passed
+  PASS  Sample run: rounding: 2 of 3 passed
+  PASS  Sample run: exactly on the threshold and a 3-digit number
+
+=== Git checks ===
+  PASS  At least 3 commits
+  PASS  Commit messages are specific
+  PASS  Formatter file changed in 3+ commits
+  PASS  Working tree clean (nothing left uncommitted)
+
+=== Stretch goals (optional, do not affect the result) ===
+  --    Stretch 1: Next ID line (not done)
+  --    Stretch 2: ID length line (not done)
+
+RESULT: all 8 checks passed. Paste this output into your submission.
