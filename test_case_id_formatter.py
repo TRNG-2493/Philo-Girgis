@@ -61,3 +61,12 @@ print(f"{test_title}: Valid login")
 #              Failed: 6
 #              Pass rate: 85.0%
 #              Release ready: False
+
+failed_tests = total_tests - passed_tests
+pass_rate = round(passed_tests / total_tests * 100,1) 
+release_ready = pass_rate >= 90
+
+print(f"Failed: {failed_tests}")
+print(f"Pass rate: {pass_rate}")
+print(f"Release ready: {release_ready}")
+
