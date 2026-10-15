@@ -4,8 +4,9 @@ Status: not started
 
 ## How to run
 
-TODO
+Run: python3 manager.py
 
 ## Your name
 
 TODO
+
