@@ -107,8 +107,22 @@ print("TC-999      :", missing_case)
 # ===========================================================================
 status_counts = None         # TODO 5a: Counter of statuses over unique_cases;
                              #          a case with no "status" counts as "unknown" (hint: .get)
+status_counts = Counter()
+for case in unique_cases:
+ status_counts[case.get("status", "unknown")] +=1
+
 executed_ids = None          # TODO 5b: SET of ids of unique cases that HAVE a "status"
+executed_ids = set()
+for case in unique_cases:
+ if case.get("status"):
+  executed_ids.add(case.get("id"))
+
 not_run_ids = None           # TODO 5c: SORTED LIST of IDs in PLANNED_IDS that are not in executed_ids
+not_run_ids = []
+for id in PLANNED_IDS:
+ if not id in executed_ids:
+  not_run_ids.append(id)
+not_run_ids.sort()
 
 print("By status   :", status_counts)
 print("Not run     :", not_run_ids)
