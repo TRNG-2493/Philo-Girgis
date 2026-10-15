@@ -1,6 +1,6 @@
 # Test-Data Manager
 
-Status: not started
+Status: done
 
 ## How to run
 
@@ -8,5 +8,4 @@ Run: python3 manager.py
 
 ## Your name
 
-TODO
-
+Philo Girgis

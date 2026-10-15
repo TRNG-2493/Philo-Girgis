@@ -38,9 +38,18 @@ PLANNED_IDS = {"TC-101", "TC-102", "TC-103", "TC-104", "TC-105", "TC-106",
 # PART 1 - Look at the raw data (slicing)
 # ===========================================================================
 raw_ids = []                 # TODO 1a: loop over RAW_TEST_CASES, append each case's "id"
+for test_case in RAW_TEST_CASES:
+ raw_ids.append(test_case["id"])
+
 first_three_ids = None       # TODO 1b: slice of raw_ids: the first 3 IDs
+first_three_ids = raw_ids[:3]
+
 last_two_ids = None          # TODO 1c: slice of raw_ids: the last 2 IDs (negative index)
+last_two_ids = raw_ids[-2:]
+
 every_other_id = None        # TODO 1d: slice of raw_ids: every 2nd ID (step)
+every_other_id = raw_ids[::2]
+
 
 print("Raw records :", len(RAW_TEST_CASES))
 print("First three :", first_three_ids)
@@ -54,7 +63,12 @@ seen_ids = set()
 unique_cases = []
 # TODO 2: for each case in RAW_TEST_CASES, if its id is not in seen_ids,
 #         add the id to seen_ids and append the case to unique_cases.
-unique_cases = None          # TODO 2 (delete this line once your loop works)
+#unique_cases = None          # TODO 2 (delete this line once your loop works)
+for case in RAW_TEST_CASES:
+ if not case["id"] in seen_ids:
+  seen_ids.add(case["id"])
+  unique_cases.append(case)
+
 
 print("Unique cases:", unique_cases)
 
@@ -63,7 +77,11 @@ print("Unique cases:", unique_cases)
 # Result shape: {"login": ["TC-101", "TC-102", ...], "search": [...], ...}
 # ===========================================================================
 ids_by_module = None         # TODO 3a: create a defaultdict(list)
+ids_by_module = defaultdict(list)
 # TODO 3b: loop over unique_cases and append each case's id under its module
+for case in unique_cases:
+  ids_by_module[case["module"]].append(case["id"])
+
 
 print("By module   :", ids_by_module)
 
@@ -71,8 +89,15 @@ print("By module   :", ids_by_module)
 # PART 4 - Lookup by ID (dict)
 # ===========================================================================
 lookup = None                # TODO 4a: dict mapping id -> the whole case dict (use unique_cases)
+lookup = {}
+for case in unique_cases:
+ lookup[case["id"]] = case
+
 found_case = None            # TODO 4b: the case for "TC-107", using lookup.get(...)
+found_case = lookup.get("TC-107")
+
 missing_case = None          # TODO 4c: lookup for "TC-999" that returns the text "not found" instead of crashing
+missing_case = lookup.get("TC-999", "not found")
 
 print("TC-107      :", found_case)
 print("TC-999      :", missing_case)
@@ -82,8 +107,22 @@ print("TC-999      :", missing_case)
 # ===========================================================================
 status_counts = None         # TODO 5a: Counter of statuses over unique_cases;
                              #          a case with no "status" counts as "unknown" (hint: .get)
+status_counts = Counter()
+for case in unique_cases:
+ status_counts[case.get("status", "unknown")] +=1
+
 executed_ids = None          # TODO 5b: SET of ids of unique cases that HAVE a "status"
+executed_ids = set()
+for case in unique_cases:
+ if case.get("status"):
+  executed_ids.add(case.get("id"))
+
 not_run_ids = None           # TODO 5c: SORTED LIST of IDs in PLANNED_IDS that are not in executed_ids
+not_run_ids = []
+for id in PLANNED_IDS:
+ if not id in executed_ids:
+  not_run_ids.append(id)
+not_run_ids.sort()
 
 print("By status   :", status_counts)
 print("Not run     :", not_run_ids)
