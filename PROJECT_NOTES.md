@@ -1,6 +1,6 @@
 # Test-Data Manager
 
-Status: not started
+Status: done
 
 ## How to run
 
@@ -8,4 +8,5 @@ TODO
 
 ## Your name
 
-TODO
+Philo Girgis
+
