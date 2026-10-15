@@ -63,7 +63,12 @@ seen_ids = set()
 unique_cases = []
 # TODO 2: for each case in RAW_TEST_CASES, if its id is not in seen_ids,
 #         add the id to seen_ids and append the case to unique_cases.
-unique_cases = None          # TODO 2 (delete this line once your loop works)
+#unique_cases = None          # TODO 2 (delete this line once your loop works)
+for case in RAW_TEST_CASES:
+ if not case["id"] in seen_ids:
+  seen_ids.add(case["id"])
+  unique_cases.append(case)
+
 
 print("Unique cases:", unique_cases)
 
