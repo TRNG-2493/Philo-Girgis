@@ -1,0 +1,1 @@
+a short table of the folders and what each is for (and which day adds it).
