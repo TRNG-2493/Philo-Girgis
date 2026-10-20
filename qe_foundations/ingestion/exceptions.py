@@ -52,8 +52,8 @@ class SourceUnreadableError(SourceError):
     __init__(self, path, os_error); the detail should mention the NAME of the
     OS error's class, e.g. "cannot be read (PermissionError)".
     """
-
-    pass  # TODO
+    def __init__(self, path, os_error):
+        super().__init__(path, f"cannot be read {type(os_error).__name__}")
 
 
 class UnsupportedFormatError(SourceError):
@@ -61,8 +61,9 @@ class UnsupportedFormatError(SourceError):
 
     __init__(self, path, suffix); must store `self.suffix`.
     """
-
-    pass  # TODO
+    def __init__(self, path, suffix):
+        super().__init__(path, f"the file extension is not .csv/.json/.xml: {suffix}")
+        self.suffix=suffix
 
 
 class MalformedSourceError(SourceError):
@@ -70,8 +71,8 @@ class MalformedSourceError(SourceError):
 
     Hint: it can simply reuse SourceError's __init__(path, detail).
     """
-
-    pass  # TODO
+    def __init__(self, path, detail):
+        super().__init__(path, detail)
 
 
 class MissingColumnsError(SourceError):
@@ -80,7 +81,9 @@ class MissingColumnsError(SourceError):
     __init__(self, path, missing); must store `self.missing` as a list.
     """
 
-    pass  # TODO
+    def __init__(self, path, missing):
+        super().__init__(path, f"a CSV file lacks required columns: {missing}")
+        self.missing = missing
 
 
 # ---- One record is invalid -------------------------------------------------
@@ -98,8 +101,8 @@ class MissingFieldError(RecordValidationError):
 
     __init__(self, row, field_name)
     """
-
-    pass  # TODO
+    def __init__(self, row, field_name):
+        super().__init__(row, field_name, f"{row} {field_name}")
 
 
 class InvalidValueError(RecordValidationError):
@@ -109,7 +112,10 @@ class InvalidValueError(RecordValidationError):
     `self.expected`.
     """
 
-    pass  # TODO
+    def __init__(self, row, field_name, value, expected):
+        super().__init__(row, field_name, f"{value}")
+        self.value = value
+        self.expected = expected
 
 
 class DuplicateIdError(RecordValidationError):
@@ -117,5 +123,6 @@ class DuplicateIdError(RecordValidationError):
 
     __init__(self, row, test_id); store `self.test_id`; the field is "id".
     """
-
-    pass  # TODO
+    def __init__(self, row, test_id):
+        super().__init__(row, "id", "the same test id appeared earlier in the file")
+        self.test_id = test_id
