@@ -23,7 +23,18 @@ def main():
     # TODO 4.3: put TextReporter(suite) and CsvReporter(suite) in ONE list, loop over
     #           it and print reporter.render() (same call, different output).
     # TODO 4.4: print "Results created:" and TestResult.how_many().
-    print("run_report.py: TODO, nothing implemented yet")
+    logSuite = Suite.from_rows("Login", SAMPLE_ROWS)
+    for test in BAD_ROWS:
+        try:
+            logSuite.add(TestResult.from_dict(test))
+        except ValueError as e:
+            print(f"Rejected {test.get("test_id")}: {e}")
+        except TypeError as e:
+            print(f"Rejected {test.get("test_id")}: {e}")
+    oneList = [TextReporter(logSuite), CsvReporter(logSuite)]
+    for report in oneList:
+        print(report.render())
+    print("Results created:", TestResult.how_many())
 
 
 if __name__ == "__main__":
