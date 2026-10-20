@@ -25,9 +25,20 @@ def open_source(path):
       * UnicodeDecodeError while reading -> MalformedSourceError  (keep the cause)
       * the file is ALWAYS closed, even when the with-body raises.
     """
-    raise NotImplementedError("Task 3A: write open_source")
-    yield  # this line only makes Python treat the function as a generator; keep it
+    try:
+      file = open(path, "r", encoding="utf-8-sig", newline="")
+    except FileNotFoundError as f:
+      raise SourceNotFoundError(path) from f
+    except OSError as e:
+       raise SourceUnreadableError(path, e) from e
 
+    try:
+      yield file
+      # this line only makes Python treat the function as a generator; keep it
+    except UnicodeDecodeError as d:
+      raise MalformedSourceError(path, d) from d
+    finally:
+      file.close()
 
 class LoadSession:
     """Bookkeeping around one load (README Task 3B).
@@ -44,7 +55,13 @@ class LoadSession:
         self.elapsed = None
 
     def __enter__(self):
-        raise NotImplementedError("Task 3B: write LoadSession.__enter__")
+        self.elapsed = time.perf_counter()
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        raise NotImplementedError("Task 3B: write LoadSession.__exit__")
+        self.elapsed = time.perf_counter() - self.elapsed
+        if not exc_type:
+           self.outcome = "completed"
+        else:
+           self.outcome = "failed"
+        return False
