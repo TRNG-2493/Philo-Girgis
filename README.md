@@ -1,3 +1,0 @@
-README names the project (QE Foundations)
-Write README.md containing: project name + one-sentence purpose; a "Project 1 milestone - Week 2, Monday" section (what exists now, what is coming Tue-Fri); a Setup section with numbered steps: create venv (python -m venv .venv), activate (PowerShell and bash commands), install (python -m pip install -r requirements.txt), verify (python smoke_utils.py); a short Usage example.
-HINT: Add both: .venv\Scripts\Activate.ps1  and  source .venv/bin/activate
