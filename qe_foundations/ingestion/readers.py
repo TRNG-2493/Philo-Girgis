@@ -20,14 +20,52 @@ from .validation import REQUIRED_FIELDS
 
 def read_csv_records(path):
     """CSV -> list of raw dicts, one per data row (use csv.DictReader)."""
-    raise NotImplementedError("Task 4A: write read_csv_records")
+    raw = []
+    with open_source(path) as file:
+        reader = csv.DictReader(file)
+        raw = list(reader)
+        missing = ["id","title","status","duration"]
+        if not reader.fieldnames:
+            raise MissingColumnsError(path, missing)
+        for k in reader.fieldnames:
+            if k in missing:
+                missing.remove(k)
+        if not missing == []:
+            raise MissingColumnsError(path, missing)
+    return raw
+
 
 
 def read_json_records(path):
     """JSON -> list of raw records. Expected shape: {"suite": ..., "tests": [...]}."""
-    raise NotImplementedError("Task 4B: write read_json_records")
+    raw = []
+    try:
+        with open_source(path) as file:
+            data = json.load(file)
+            if not isinstance(data, dict):
+                raise MalformedSourceError(path, "wrong shape")
+            raw = data.get("tests")
+            if not isinstance(raw, list):
+                raise MalformedSourceError(path, "no tests")
+    except json.JSONDecodeError as e:
+        raise MalformedSourceError(path, e) from e
+    return raw
+        
 
 
 def read_xml_records(path):
     """XML -> list of raw dicts, one per <testcase> element at ANY depth."""
-    raise NotImplementedError("Task 4C: write read_xml_records")
+    raw = []
+    try:
+        with open_source(path) as file:
+            root = ET.fromstring(file.read())
+            for case in root.iter("testcase"):
+                temp = {"id": case.get("id", None),
+                        "status": case.get("status", None),
+                        "title": case.findtext("title", None),
+                        "duration": case.findtext("duration", None)}
+                raw.append(temp)
+    except ET.ParseError as e:
+        raise MalformedSourceError(path, e) from e
+
+    return raw
