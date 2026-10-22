@@ -10,4 +10,8 @@ branch change
 master change
 
 
-Exercise 4: https://github.com/Philo-Girgis/qe-test-utils--George-Philo-
+Week 1 Thursday: https://github.com/Philo-Girgis/qe-test-utils--George-Philo-
+
+Week 2 Thursday: https://github.com/SuperMada/qe-foundations/tree/feature/sql-validation-Adam-Fischer-Philo-Girgis
+
+
