@@ -23,6 +23,7 @@ def next_run_id():
     The counter lives at module level so ids keep increasing for as long as
     the program runs.
     """
+    global run_counter
     run_counter += 1
     return f"RUN-{run_counter:04d}"
 
@@ -35,7 +36,10 @@ def median(values):
     Empty list: raise ValueError("median() needs at least one value").
     """
     ordered = sorted(values)
-    return ordered[len(ordered) // 2]
+    if len(ordered)%2 == 1:
+        return ordered[len(ordered) // 2]
+    else:
+        return (ordered[(len(ordered) // 2)-1] + ordered[len(ordered) // 2])/2
 
 
 def slowest(durations, n):
@@ -46,7 +50,7 @@ def slowest(durations, n):
     The caller's list must not be changed.
     """
     durations.sort(reverse=True)
-    return durations[:n - 1]
+    return durations[:n]
 
 
 def group_by_suite(results):
@@ -59,16 +63,25 @@ def group_by_suite(results):
     """
     grouped = {}
     for result in results:
-        grouped[result["suite"]][result["status"]] += 1
+        suite = result.get("suite")
+        if not suite:
+            suite = "unknown"
+        if not grouped.get(suite):
+            grouped[suite] = {}
+        if not grouped.get(suite).get(result["status"]):
+            grouped[suite][result["status"]] = 0
+        grouped[suite][result["status"]] +=1
     return grouped
 
 
-def note_flaky(test_name, flaky=[]):
+def note_flaky(test_name, flaky=None):
     """Add test_name to a list of flaky tests and return that list.
 
     If the caller passes its own list, add to that list.
     If the caller passes nothing, start a NEW empty list for this call.
     """
+    if not flaky:
+        flaky = []
     flaky.append(test_name)
     return flaky
 
