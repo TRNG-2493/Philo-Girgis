@@ -35,6 +35,8 @@ def median(values):
     Even count: the mean of the two middle values of the sorted numbers.
     Empty list: raise ValueError("median() needs at least one value").
     """
+    if not values:
+        raise ValueError
     ordered = sorted(values)
     if len(ordered)%2 == 1:
         return ordered[len(ordered) // 2]
@@ -49,8 +51,9 @@ def slowest(durations, n):
     n == 0 returns an empty list.
     The caller's list must not be changed.
     """
-    durations.sort(reverse=True)
-    return durations[:n]
+    temp = durations.copy()
+    temp.sort(reverse=True)
+    return temp[:n]
 
 
 def group_by_suite(results):
@@ -98,12 +101,18 @@ def summarise_run(results, durations):
       latest_ms   the duration of the most recent test (the LAST item
                   of durations as it was passed in)
     """
+    latest = None
+    med = None
+    if durations:
+        latest = durations[-1]
+        med = median(durations)
+
     summary = {
         "run_id": next_run_id(),
         "total": len(results),
         "by_suite": group_by_suite(results),
-        "median_ms": median(durations),
+        "median_ms": med,
         "slowest_ms": slowest(durations, 3),
-        "latest_ms": durations[-1],
+        "latest_ms": latest,
     }
     return summary

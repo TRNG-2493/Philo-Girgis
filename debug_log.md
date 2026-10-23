@@ -55,7 +55,7 @@ you actually saw (a pdb command and its output, or a print line).
 - Symptom (what I saw):
 - Family (syntax / runtime / logic):
 - Hypothesis (before I looked):
-- Evidence (pdb command + output, or print output):
+- Evidence (pdb command + output, or print output): {'run_id': 'RUN-0001', 'total': 4, 'by_suite': {'login': {'pass': 2, 'fail': 1}, 'search': {'pass': 1}}, 'median_ms': 135.0, 'slowest_ms': [340, 210, 150], 'latest_ms': 80}
 - Root cause (one sentence):
 - Fix (one sentence):
 - Verified by:
@@ -64,10 +64,13 @@ you actually saw (a pdb command and its output, or a print line).
 - Symptom (what I saw):
 - Family (syntax / runtime / logic):
 - Hypothesis (before I looked):
-- Evidence (pdb command + output, or print output):
+- Evidence (pdb command + output, or print output): IndexError: list index out of range
 - Root cause (one sentence):
 - Fix (one sentence):
 - Verified by:
 
 ## Reflection (3 sentences)
-Which bug was hardest to find and why? Which technique (print, breakpoint, post-mortem, assert) helped most? What would you do differently next time?
+The hardest bug was 3 since it had so many steps to it
+Print statements were most useful since they made me realize that my assumptions were wrong
+Next time, I would spend more time understanding what is even required rather than assuming I already understand
+
