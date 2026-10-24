@@ -14,7 +14,11 @@ Written lessons that help: debugging-techniques.md, mutability-and-memory.md,
 scope-and-namespaces.md, built-in-python-functions.md.
 """
 
+import logging
+
 run_counter = 0
+
+logger = logging.getLogger(__name__)
 
 
 def next_run_id():
@@ -39,9 +43,13 @@ def median(values):
         raise ValueError
     ordered = sorted(values)
     if len(ordered)%2 == 1:
-        return ordered[len(ordered) // 2]
+        result = ordered[len(ordered) // 2]
+        logger.debug("median of %d values = %s", len(values), result)
+        return result
     else:
-        return (ordered[(len(ordered) // 2)-1] + ordered[len(ordered) // 2])/2
+        result = (ordered[(len(ordered) // 2)-1] + ordered[len(ordered) // 2])/2
+        logger.debug("median of %d values = %s", len(values), result)
+        return result
 
 
 def slowest(durations, n):
@@ -68,6 +76,7 @@ def group_by_suite(results):
     for result in results:
         suite = result.get("suite")
         if not suite:
+            logger.warning("no suite")
             suite = "unknown"
         if not grouped.get(suite):
             grouped[suite] = {}
@@ -115,4 +124,5 @@ def summarise_run(results, durations):
         "slowest_ms": slowest(durations, 3),
         "latest_ms": latest,
     }
+    logger.info("%s: %d", summary.get("run_id"), summary.get("total"))
     return summary

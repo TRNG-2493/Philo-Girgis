@@ -11,6 +11,8 @@ You may edit this file. Add your breakpoint() calls to run_stats.py instead.
 """
 import sys
 
+import logging
+
 import run_stats
 
 DURATIONS = [120, 80, 340, 95, 210, 150]          # ms, in the order the tests ran
@@ -63,10 +65,35 @@ def ticket_7():
 
 TICKETS = {1: ticket_1, 2: ticket_2, 3: ticket_3, 4: ticket_4, 5: ticket_5, 6: ticket_6, 7: ticket_7}
 
+def build_logger(logfile="run_report.log"):
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    if logger.handlers:
+        return logger
+
+    fmt = logging.Formatter(
+        "%(asctime)s | %(levelname)-8s | %(name)s:%(lineno)d | %(message)s"
+    )
+
+    console = logging.StreamHandler(sys.stdout)
+    console.setLevel(logging.INFO) 
+    console.setFormatter(fmt)
+
+    file_handler = logging.FileHandler(logfile, mode="w", encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(fmt)
+
+    logger.addHandler(console)
+    logger.addHandler(file_handler)
+    logger.propagate = False 
+    return logger
+
 
 def main(argv):
     # ---- Part B: configure logging HERE (the entry point), not inside run_stats.py ----
     # TODO (Part B): set up console (INFO) + file (DEBUG, run_report.log) handlers.
+
+    build_logger()
 
     if len(argv) > 1:
         number = int(argv[1])
