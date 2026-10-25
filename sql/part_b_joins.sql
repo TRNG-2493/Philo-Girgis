@@ -13,7 +13,10 @@
 -- RETURNS: run_id, build_name, title, result   (expect 40 rows: 44 runs minus 4 unusable ones)
 -- HINT-1: test_runs is the "many" side; join it to builds and to test_cases on their keys.
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT run_id, build_name, title, result
+from test_runs as r
+inner join builds as b on b.build_id = r.build_id
+inner join test_cases as c on c.case_id = r.case_id;
 
 -- @Q B2 LEFT JOIN + IS NULL (anti-join): cases that were never run
 -- TASK: every test case that has no row in test_runs. Include retired cases for now.
@@ -21,12 +24,16 @@ SELECT 'TODO' AS todo;
 -- HINT-1: keep ALL test_cases (left side), try to match runs, then keep the rows where the match failed.
 -- HINT-2: after LEFT JOIN, test a column of the RIGHT table that can never be NULL in a real match (its primary key).
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+select test_cases.case_id, title, status from test_cases
+left join test_runs on test_runs.case_id = test_cases.case_id
+where run_id is null;
 
 -- @Q B3 LEFT JOIN + IS NULL again: builds without any run
 -- RETURNS: build_id, build_name
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+select builds.build_id, build_name status from builds
+left join test_runs on test_runs.build_id = builds.build_id
+where run_id is null;
 
 -- @Q B4 RIGHT JOIN: runs that point at a test case that does not exist
 -- TASK: write it as a RIGHT JOIN with test_runs on the right (needs SQLite 3.39+). Return the runs that found no case.
@@ -34,7 +41,9 @@ SELECT 'TODO' AS todo;
 -- HINT-1: FROM test_cases AS c RIGHT JOIN test_runs AS r ON ... WHERE c.case_id IS NULL
 -- HINT-2: if your SQLite is older: swap the table order and use LEFT JOIN (a RIGHT JOIN is a LEFT JOIN with the tables swapped).
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+select run_id, test_runs.case_id from test_cases
+right join test_runs on test_runs.case_id = test_cases.case_id
+where test_cases.case_id is null;
 
 -- @Q B5 FULL JOIN: mismatches on BOTH sides in one query
 -- TASK: FULL JOIN test_cases and test_runs on case_id, keep only rows where one side is missing,
@@ -43,7 +52,14 @@ SELECT 'TODO' AS todo;
 -- HINT-1: WHERE c.case_id IS NULL OR r.run_id IS NULL
 -- HINT-2: side = CASE WHEN r.run_id IS NULL THEN 'case without run' ELSE 'run without case' END
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT c.case_id, run_id, 
+    CASE 
+        WHEN run_id IS NULL THEN 'case without run' 
+        ELSE 'run without case' 
+    END AS side
+FROM test_cases AS c
+FULL JOIN test_runs AS r ON c.case_id = r.case_id
+WHERE c.case_id IS NULL OR run_id IS NULL;
 
 -- @Q B6 Emulate the FULL JOIN of B5 WITHOUT RIGHT/FULL JOIN (works on any SQLite and on MySQL)
 -- TASK: produce the SAME 6 rows as B5 using LEFT JOINs and UNION ALL (one anti-join per side).
@@ -52,7 +68,15 @@ SELECT 'TODO' AS todo;
 -- HINT-1: part 1 = cases LEFT JOIN runs WHERE run missing;  part 2 = runs LEFT JOIN cases WHERE case missing.
 -- HINT-2: UNION ALL is correct here because the two halves can never overlap; plain UNION would also work but hides that fact.
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT c.case_id, run_id,  'case without run' AS side
+FROM test_cases AS c
+LEFT JOIN test_runs AS r ON c.case_id = r.case_id
+WHERE r.run_id IS NULL
+UNION ALL
+SELECT c.case_id, run_id, 'run without case' AS side
+FROM  test_runs AS r
+LEFT JOIN test_cases AS c ON r.case_id = c.case_id
+WHERE c.case_id IS NULL;
 
 -- @Q B7 Multi-table query: defects with their full context
 -- TASK: for every defect that points to an existing run, show the defect, the build it was found in,
@@ -60,4 +84,10 @@ SELECT 'TODO' AS todo;
 -- RETURNS: defect_id, build_name, title, severity   (expect 10 rows; 2 defects have no usable run)
 -- HINT-1: defects -> test_runs (on run_id) -> builds (on build_id) and test_runs -> test_cases (on case_id).
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT defect_id, build_name, title, severity
+from defects as d
+inner join test_runs as r on r.run_id = d.run_id
+inner join builds as b on b.build_id = r.build_id
+inner join test_cases as c on r.case_id = c.case_id
+
+
