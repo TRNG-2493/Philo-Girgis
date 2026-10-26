@@ -8,7 +8,8 @@
 -- RETURNS: case_id, title
 -- HINT-1: WHERE case_id IN (SELECT case_id FROM test_runs WHERE result = 'fail')
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT case_id, title from test_cases
+WHERE case_id IN (SELECT case_id FROM test_runs WHERE result = 'fail');
 
 -- @Q C2 THE NOT IN TRAP: never-run cases, written with NOT IN
 -- TASK: write "cases that have no run" with NOT IN (SELECT case_id FROM test_runs). Run it.
@@ -17,20 +18,23 @@ SELECT 'TODO' AS todo;
 -- HINT-1: look at the case_id column of test_runs: is there anything in it that is not a number?
 -- HINT-2: x NOT IN (1, 2, NULL) is never TRUE. See "three-valued logic" in Thursday's WHERE lesson.
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT case_id, title from test_cases
+where case_id not in (SELECT case_id FROM test_runs);
 
 -- @Q C3 NOT EXISTS: the correct anti-join with a correlated subquery
 -- TASK: cases with no run, written with NOT EXISTS. Compare with B2 (same 3 rows).
 -- RETURNS: case_id, title
 -- HINT-1: WHERE NOT EXISTS (SELECT 1 FROM test_runs AS r WHERE r.case_id = c.case_id)
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT case_id, title from test_cases as c
+where not exists (SELECT * FROM test_runs as r where r.case_id = c.case_id);
 
 -- @Q C4a Scalar subquery: runs slower than average (naive)
 -- TASK: runs whose duration_sec is greater than the average duration_sec of ALL runs. Use a scalar subquery.
 -- RETURNS: run_id, duration_sec     (look at the result: only ONE row. Why?)
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT run_id, duration_sec from test_runs
+where duration_sec > (select avg(duration_sec) from test_runs);
 
 -- @Q C4b Scalar subquery: slower than the average of VALID durations
 -- TASK: same, but the average must only use durations between 1 and 3600 seconds.
@@ -39,10 +43,12 @@ SELECT 'TODO' AS todo;
 -- HINT-1: put the filter INSIDE the subquery: (SELECT AVG(duration_sec) FROM test_runs WHERE duration_sec BETWEEN 1 AND 3600)
 -- HINT-2: the outer query may still return the 86400 row: that is fine, it IS slower than average.
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT run_id, duration_sec from test_runs
+where duration_sec > (select avg(duration_sec) from test_runs where duration_sec between 1 and 3600);
 
 -- @Q C5 EXISTS with a condition: defects logged against a run that PASSED
 -- RETURNS: defect_id
 -- HINT-1: WHERE EXISTS (SELECT 1 FROM test_runs AS r WHERE r.run_id = d.run_id AND r.result = 'pass')
 -- TODO: write your statement below and delete the placeholder
-SELECT 'TODO' AS todo;
+SELECT defect_id from defects as d
+where exists (select * from test_runs as r where d.run_id = r.run_id and result = "pass");
