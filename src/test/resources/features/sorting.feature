@@ -1,4 +1,5 @@
-# src/test/resources/features/sorting.feature
+# src/test/resources/features/sorting.feature   (final: Handout 3 + tags from Handout 4)
+@SL-104
 Feature: Sort the products
   Shoppers can sort the products by name or by price.
 
@@ -15,6 +16,7 @@ Feature: Sort the products
       | Name (A to Z) | Sauce Labs Backpack               |
       | Name (Z to A) | Test.allTheThings() T-Shirt (Red) |
 
+    @smoke
     Examples: Sorting by price
       | order               | first                    |
       | Price (low to high) | Sauce Labs Onesie        |
